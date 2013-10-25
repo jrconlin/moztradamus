@@ -3,11 +3,12 @@ package main
 import (
     "mozilla.org/util"
     "mozilla.org/moztradamus"
+    "mozilla.org/moztradamus/storage"
+
 
     "flag"
     "fmt"
     "net/http"
-    "log"
     "os"
     "os/signal"
     "runtime"
@@ -20,8 +21,8 @@ var (
     profile *string = flag.String("profile", "", "Profile file output")
     memProfile *string = flag.String("memProfile", "", "Profile file output")
     logging     * int = flag.Int("logging", 10, "Logging level (0=none...10=verbose")
-    //logger  *util.HekaLogger
-    //store   *storage.Storage
+    logger  *util.HekaLogger
+    store   *storage.Storage
 )
 
 
@@ -31,13 +32,6 @@ const (
 )
 
 
-func logger(level int, msg string) {
-    if level < *logging {
-        log.Printf(msg);
-    }
-}
-
-
 func main() {
     flag.Parse()
 
@@ -45,7 +39,10 @@ func main() {
     config := util.MzGetConfig(*configFile)
     config["VERSION"]=VERSION
     runtime.GOMAXPROCS(runtime.NumCPU())
-    handlers := moztradamus.NewHandler(config)
+    logger := util.NewHekaLogger(config)
+    store :=  storage.New(config, logger)
+    handlers := moztradamus.NewHandler(config, store, logger)
+
 
     // Signal handler
     sigChan := make(chan os.Signal)
@@ -60,7 +57,8 @@ func main() {
     RESTMux.HandleFunc(fmt.Sprintf("/%s/ping/", verRoot), handlers.PingHandler)
     RESTMux.HandleFunc("/status/", handlers.StatusHandler)
 
-    logger(5,"startup...")
+    logger.Info("main","startup...", nil)
+
     go func() {
         errChan <- http.ListenAndServe(host + ":" + port, nil)
     }()
@@ -71,7 +69,7 @@ func main() {
             panic ("ListenAndServe: " + err.Error())
         }
     case <-sigChan:
-        logger(5, "Shutting down...")
+        logger.Info("main", "Shutting down...", nil)
     }
 
 }

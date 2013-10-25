@@ -2,6 +2,7 @@ package moztradamus
 
 import(
     "mozilla.org/util"
+    "mozilla.org/moztradamus/storage"
 
     "crypto/rand"
     "encoding/base64"
@@ -16,10 +17,14 @@ import(
 
 type Handler struct {
     config util.JsMap
+    logger *util.HekaLogger
+    store  *storage.Storage
 }
 
-func NewHandler(config util.JsMap) *Handler {
-    return &Handler{config: config}
+func NewHandler(config util.JsMap, store *storage.Storage, logger *util.HekaLogger) *Handler {
+    return &Handler{config: config,
+        store: store,
+        logger: logger}
 }
 
 func (self *Handler) newToken() (string, error) {

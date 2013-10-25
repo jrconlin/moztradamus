@@ -1,6 +1,8 @@
 code.google.com/p/goprotobuf
 code.google.com/p/go-uuid
 code.google.com/p/go.net
+code.google.com/p/go-uuid/uuid
+github.com/ianoshen/gomc
 github.com/mozilla-services/heka/client
 github.com/mozilla-services/heka/message
 

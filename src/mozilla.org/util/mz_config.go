@@ -16,7 +16,6 @@ import (
 /* Craptastic typeless parser to read config values (use until things
    settle and you can use something more efficent like TOML)
 */
-
 type JsMap map[string] interface{}
 
 func MzGetConfig(filename string) JsMap {
