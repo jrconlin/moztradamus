@@ -57,7 +57,7 @@ func (self *Handler) PingHandler(resp http.ResponseWriter, req *http.Request) {
         token, _ = self.newToken()
         log.Printf("New token: %s", token)
     } else {
-        maxLen := int(math.Min(float64(16), float64(len(elements[3]))))
+        maxLen := int(math.Min(float64(25), float64(len(elements[3]))))
         log.Printf("maxLen %d", maxLen)
         token = elements[3][0:maxLen]
         log.Printf("maxLen %s", token)
