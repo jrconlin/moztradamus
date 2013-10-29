@@ -55,6 +55,7 @@ func main() {
     var RESTMux *http.ServeMux = http.DefaultServeMux
     var verRoot = strings.SplitN(VERSION, ".", 2)[0]
     RESTMux.HandleFunc(fmt.Sprintf("/%s/ping/", verRoot), handlers.PingHandler)
+    RESTMux.HandleFunc(fmt.Sprintf("/%s/poll/", verRoot), handlers.PollHandler)
     RESTMux.HandleFunc("/status/", handlers.StatusHandler)
 
     logger.Info("main","startup...", nil)

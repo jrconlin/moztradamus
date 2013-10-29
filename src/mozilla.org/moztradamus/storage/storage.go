@@ -360,6 +360,7 @@ func (self *Storage) fetchRec(pk []byte) (result *record, err error) {
 	}
 	return result, err
 }
+
 func (self *Storage) storeRec(pk []byte, rec *record) (err error) {
 	if pk == nil {
 		return StorageError{"Invalid Primary Key"}
@@ -388,6 +389,23 @@ func (self *Storage) storeRec(pk []byte, rec *record) (err error) {
 		}
 	}
 	return err
+}
+
+func (self *Storage) RegPing(pk []byte) (err error) {
+    rec := record{L: time.Now().Unix()}
+    log.Printf("Storing rec %q", rec)
+    return self.storeRec(pk, &rec)
+}
+
+func (self *Storage) CheckPing(pk []byte) (rep int64, err error) {
+    log.Printf("Looking for rec %s", pk)
+    if rec, err := self.fetchRec(pk); err == nil {
+        log.Printf("Found rec %q", rec)
+        return rec.L, nil
+    } else {
+        log.Printf("Nope")
+        return 0, err
+    }
 }
 
 func (self *Storage) Close() {
