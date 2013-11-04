@@ -1,3 +1,7 @@
+**Status: Abandoned. This was not the approach we were looking for and thus, it's going nowhere.**
+
+**Eventually I'll remove this repo in an effort to curb the entropy of the universe.**
+
 moztradamus
 ===========
 
